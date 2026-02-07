@@ -1,4 +1,4 @@
-# Supermemory
+# ThoughtVault
 
 Local semantic memory system for AI agents. Zero API cost.
 
@@ -48,7 +48,7 @@ Local semantic memory system for AI agents. Zero API cost.
 ## Architecture
 
 ```
-supermemory/
+thoughtvault/
 ├── index.py      # Index files into vector DB
 ├── search.py     # Semantic search CLI
 ├── capture.py    # Auto-capture from conversations
