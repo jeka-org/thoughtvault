@@ -10,7 +10,8 @@ import argparse
 from pathlib import Path
 from lib.embeddings import embed
 from lib.chunker import chunk_file
-from lib.db import get_db, store_chunk, delete_source, get_stats
+from lib.db import get_db, store_chunk, delete_source, get_stats, get_all_embeddings
+from lib.faiss_index import build_index
 
 def index_directory(directory: Path, extensions: list, force: bool = False):
     """Index all matching files in a directory."""
@@ -56,6 +57,12 @@ def index_directory(directory: Path, extensions: list, force: bool = False):
     
     stats = get_stats(db)
     print(f"  Total in database: {stats['total_chunks']} chunks from {stats['total_files']} files")
+    
+    # Build FAISS index for fast search
+    print("\nBuilding FAISS index...")
+    all_embeddings = get_all_embeddings(db)
+    build_index(all_embeddings)
+    print("✓ FAISS index ready")
 
 def main():
     parser = argparse.ArgumentParser(description="Index files into semantic memory")

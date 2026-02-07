@@ -10,22 +10,40 @@ import sys
 import argparse
 from lib.embeddings import embed, cosine_similarity
 from lib.db import get_db, get_all_embeddings, get_stats
+from lib.faiss_index import search as faiss_search, index_exists
 
-def search(query: str, top_k: int = 5):
-    """Search for similar content."""
+def search(query: str, top_k: int = 5, quiet: bool = False):
+    """Search for similar content using FAISS (fast) or brute-force (fallback)."""
     db = get_db()
     
     stats = get_stats(db)
     if stats['total_chunks'] == 0:
-        print("No content indexed yet. Run ./index.py first.")
+        if not quiet:
+            print("No content indexed yet. Run ./index.py first.")
         return []
-    
-    print(f"Searching {stats['total_chunks']} chunks...\n")
     
     # Embed query
     query_embedding = embed(query)
     
-    # Get all embeddings and compute similarities
+    # Try FAISS first (fast path)
+    if index_exists():
+        if not quiet:
+            print(f"Searching {stats['total_chunks']} chunks (FAISS)...\n")
+        
+        faiss_results = faiss_search(query_embedding, top_k)
+        results = [{
+            'id': r[0],
+            'content': r[1],
+            'source': r[2],
+            'chunk_index': r[3],
+            'similarity': r[4]
+        } for r in faiss_results]
+        return results
+    
+    # Fallback to brute-force
+    if not quiet:
+        print(f"Searching {stats['total_chunks']} chunks (brute-force)...\n")
+    
     all_chunks = get_all_embeddings(db)
     
     results = []
@@ -52,11 +70,18 @@ def main():
     
     args = parser.parse_args()
     
-    results = search(args.query, args.top)
+    results = search(args.query, args.top, quiet=args.json)
     
     if args.json:
         import json
-        print(json.dumps(results, indent=2))
+        # Format for OpenClaw plugin compatibility
+        formatted = [{
+            'file': r['source'],
+            'line': r['chunk_index'],
+            'score': r['similarity'],
+            'text': r['content']
+        } for r in results]
+        print(json.dumps(formatted))
     else:
         for i, r in enumerate(results, 1):
             print(f"━━━ Result {i} (similarity: {r['similarity']:.3f}) ━━━")
