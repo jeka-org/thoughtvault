@@ -40,9 +40,20 @@ def chunk_text(text: str, chunk_size: int = 500, overlap: int = 50) -> List[str]
     
     return chunks
 
+def extract_context(content: str, path: Path) -> str:
+    """Extract file context: filename + first header if present."""
+    filename = path.stem.replace('-', ' ').replace('_', ' ')
+    
+    # Try to find first markdown header
+    header_match = re.search(r'^#\s+(.+)$', content, re.MULTILINE)
+    if header_match:
+        return f"[{filename}] {header_match.group(1)}: "
+    return f"[{filename}]: "
+
 def chunk_file(path: Path) -> List[Tuple[str, int, str]]:
     """
     Chunk a file and return (chunk_text, chunk_index, source_path) tuples.
+    Prepends file context to each chunk for better search relevance.
     """
     try:
         content = path.read_text(encoding='utf-8')
@@ -50,8 +61,10 @@ def chunk_file(path: Path) -> List[Tuple[str, int, str]]:
         print(f"Error reading {path}: {e}")
         return []
     
+    context = extract_context(content, path)
     chunks = chunk_text(content)
-    return [(chunk, i, str(path)) for i, chunk in enumerate(chunks)]
+    # Prepend context to each chunk for better semantic matching
+    return [(context + chunk, i, str(path)) for i, chunk in enumerate(chunks)]
 
 if __name__ == "__main__":
     # Test

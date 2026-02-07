@@ -29,6 +29,10 @@ def index_directory(directory: Path, extensions: list, force: bool = False):
             rel_path = file_path.relative_to(directory)
             if any(part.startswith('.') for part in rel_path.parts):
                 continue
+            # Skip noisy directories that aren't curated knowledge
+            skip_dirs = ['digests', 'drafts', 'homepage-backup', 'content/toolkit-threads', 'content/toolkit-articles']
+            if any(skip in str(rel_path) for skip in skip_dirs):
+                continue
         except ValueError:
             pass  # Not relative, just process it
         
