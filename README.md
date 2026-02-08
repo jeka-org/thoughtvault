@@ -23,6 +23,32 @@ Local semantic memory system for AI agents. Zero API cost.
 - FAISS (`pip install faiss-cpu`)
 - SQLite (included in Python)
 
+## Installation
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/jeka-org/thoughtvault.git
+cd thoughtvault
+
+# 2. Install Ollama (if not already installed)
+curl -fsSL https://ollama.com/install.sh | sh
+
+# 3. Pull the embedding model
+ollama pull nomic-embed-text
+
+# 4. Install Python dependencies
+pip install faiss-cpu requests numpy
+
+# 5. Verify Ollama is running
+ollama list  # should show nomic-embed-text
+
+# 6. Index your files
+./index.py ~/path/to/your/markdown/files
+
+# 7. Search
+./search.py "your query here"
+```
+
 ## Quick Start
 
 ```bash
@@ -70,20 +96,22 @@ thoughtvault/
 │   ├── chunker.py     # Smart markdown-aware chunking
 │   ├── db.py          # SQLite with binary embeddings
 │   └── faiss_index.py # FAISS index (optimized metadata)
-├── memory.db          # SQLite database (~14MB for 3K chunks)
-├── faiss.index        # FAISS vector index (~9MB)
-└── faiss_metadata.json # Compact ID-only metadata (~200KB)
+├── memory.db          # SQLite database (~11MB for 2.7K chunks)
+├── faiss.index        # FAISS vector index (~8MB)
+└── faiss_metadata.json # Compact ID-only metadata (~180KB)
 ```
 
-## Performance (3,120 chunks, 122 files)
+## Performance (2,670 chunks, validated 2026-02-08)
 
-| Metric | Before | After |
-|--------|--------|-------|
-| Database size | 51MB | 14MB (-73%) |
-| FAISS metadata | 2MB | 216KB (-89%) |
-| Incremental re-index (no changes) | ~60s | 0.3s |
-| Search latency | ~700ms | ~400ms |
-| Cached query | ~700ms | <1ms |
+| Metric | Value |
+|--------|-------|
+| Database size | 11MB |
+| FAISS index | 7.8MB |
+| FAISS metadata | 179KB |
+| Search latency | ~96ms |
+| Cached query | ~3ms (32x speedup) |
+| Incremental re-index (no changes) | <1s |
+| Embedding size | 3KB per chunk (binary float32) |
 
 ## Credits
 

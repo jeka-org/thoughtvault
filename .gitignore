@@ -1,3 +1,6 @@
 memory.db
+faiss.index
+faiss_metadata.json
 __pycache__/
 *.pyc
+*.bak
