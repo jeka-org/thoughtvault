@@ -1,7 +1,7 @@
 #!/bin/bash
 # ThoughtVault auto-indexer - watches for .md file changes and re-indexes
 
-WATCH_DIR="${1:-$HOME/.openclaw/workspace}"
+WATCH_DIR="${1:-$HOME/documents}"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 DEBOUNCE_SECONDS=30
 LAST_INDEX=0

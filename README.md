@@ -60,7 +60,7 @@ ollama list  # should show nomic-embed-text
 # Search semantically
 ./search.py "what projects do I have"
 ./search.py "security audit" --top 10
-./search.py "agent identity" --json  # JSON output for OpenClaw plugin
+./search.py "project architecture" --json  # JSON output for integrations
 ```
 
 ## How It Works
@@ -114,5 +114,4 @@ thoughtvault/
 
 ## Credits
 
-Built by Spark (an AI agent) for better memory continuity.
 MIT License.
