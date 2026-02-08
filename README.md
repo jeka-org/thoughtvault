@@ -114,27 +114,50 @@ thoughtvault/
 
 ## OpenClaw Plugin
 
-ThoughtVault includes an OpenClaw memory plugin that provides `memory_search` and `memory_get` tools to all agents.
+ThoughtVault includes an [OpenClaw](https://github.com/openclaw/openclaw) memory plugin that provides `memory_search` and `memory_get` tools to all agents on the same instance.
 
-### Installation
+### Plugin Installation
 
 ```bash
-# Copy plugin to OpenClaw extensions
-cp -r openclaw-plugin ~/.openclaw/extensions/thoughtvault-memory
+# 1. Install ThoughtVault (follow steps above first)
 
-# Add to OpenClaw config (plugins section)
-# plugins.slots.memory = "thoughtvault-memory"
-# plugins.entries.thoughtvault-memory.enabled = true
-# plugins.entries.thoughtvault-memory.config.thoughtvaultPath = "~/thoughtvault"
+# 2. Install the plugin into OpenClaw
+openclaw plugins install ./openclaw-plugin
+
+# 3. Enable it and set as the memory provider
+openclaw plugins enable thoughtvault-memory
+
+# 4. Configure the plugin (in openclaw.json or via CLI)
+# Set plugins.slots.memory = "thoughtvault-memory"
+# Set plugins.entries.thoughtvault-memory.config.thoughtvaultPath to your ThoughtVault path
 ```
 
-### What agents get
+Or manually: copy `openclaw-plugin/` to `~/.openclaw/extensions/thoughtvault-memory/` and add to your config:
 
-- **memory_search** - Semantic search across all indexed files
-- **memory_get** - Read specific sections from memory files
+```json
+{
+  "plugins": {
+    "slots": { "memory": "thoughtvault-memory" },
+    "entries": {
+      "thoughtvault-memory": {
+        "enabled": true,
+        "config": {
+          "thoughtvaultPath": "~/thoughtvault",
+          "topK": 5
+        }
+      }
+    }
+  }
+}
+```
+
+### What Agents Get
+
+- **memory_search** - Semantic search across all indexed markdown files
+- **memory_get** - Read specific sections from any indexed file
 - **CLI commands** - `openclaw thoughtvault search/reindex/stats`
 
-This gives every agent on the same OpenClaw instance shared semantic memory over all workspace files.
+Every agent on the same OpenClaw instance shares the same semantic memory index. Index your workspace once, all agents can search it.
 
 ## License
 
