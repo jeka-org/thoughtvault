@@ -1,0 +1,31 @@
+{
+  "id": "thoughtvault-memory",
+  "name": "ThoughtVault Memory",
+  "description": "Local semantic memory using ThoughtVault + Ollama embeddings",
+  "version": "1.0.0",
+  "kind": "memory",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "thoughtvaultPath": {
+        "type": "string",
+        "description": "Path to ThoughtVault directory"
+      },
+      "topK": {
+        "type": "number",
+        "description": "Default number of results"
+      }
+    }
+  },
+  "uiHints": {
+    "thoughtvaultPath": {
+      "label": "ThoughtVault Path",
+      "placeholder": "~/thoughtvault"
+    },
+    "topK": {
+      "label": "Default Results",
+      "placeholder": "5"
+    }
+  }
+}

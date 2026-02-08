@@ -112,6 +112,30 @@ thoughtvault/
 | Incremental re-index (no changes) | <1s |
 | Embedding size | 3KB per chunk (binary float32) |
 
-## Credits
+## OpenClaw Plugin
 
-MIT License.
+ThoughtVault includes an OpenClaw memory plugin that provides `memory_search` and `memory_get` tools to all agents.
+
+### Installation
+
+```bash
+# Copy plugin to OpenClaw extensions
+cp -r openclaw-plugin ~/.openclaw/extensions/thoughtvault-memory
+
+# Add to OpenClaw config (plugins section)
+# plugins.slots.memory = "thoughtvault-memory"
+# plugins.entries.thoughtvault-memory.enabled = true
+# plugins.entries.thoughtvault-memory.config.thoughtvaultPath = "~/thoughtvault"
+```
+
+### What agents get
+
+- **memory_search** - Semantic search across all indexed files
+- **memory_get** - Read specific sections from memory files
+- **CLI commands** - `openclaw thoughtvault search/reindex/stats`
+
+This gives every agent on the same OpenClaw instance shared semantic memory over all workspace files.
+
+## License
+
+MIT
