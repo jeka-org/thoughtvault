@@ -33,13 +33,12 @@ cd thoughtvault
 # 2. Install Ollama (if not already installed)
 curl -fsSL https://ollama.com/install.sh | sh
 
-# 3. Pull the embedding model
+# 3. Install Python dependencies
+pip install -r requirements.txt
+
+# 5. Start Ollama and verify the model is available
+ollama serve &  # start Ollama daemon (skip if already running)
 ollama pull nomic-embed-text
-
-# 4. Install Python dependencies
-pip install faiss-cpu requests numpy
-
-# 5. Verify Ollama is running
 ollama list  # should show nomic-embed-text
 
 # 6. Index your files
