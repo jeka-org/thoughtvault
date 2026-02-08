@@ -161,4 +161,4 @@ Every agent on the same OpenClaw instance shares the same semantic memory index.
 
 ## License
 
-MIT
+AGPL-3.0 — See [LICENSE](LICENSE) for details.
