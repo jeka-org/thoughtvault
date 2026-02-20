@@ -1,5 +1,7 @@
 # ThoughtVault
 
+> **Note:** This was a learning project. I built ThoughtVault to give my AI agent persistent semantic memory, and it taught me a ton about chunking, recency weighting, and local-first architecture. I've since moved to [mem0](https://github.com/mem0ai/mem0) for production use, which adds structured fact extraction on top of embeddings. ThoughtVault still works as a standalone local search tool, but it's no longer actively developed. Read the full story: [What I Learned Building Memory for an AI Agent](https://jeka.org/thoughtvault-memory/)
+
 Local semantic memory system for AI agents. Zero API cost.
 
 ## Features
